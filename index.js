@@ -274,6 +274,30 @@ async function run() {
 			res.send(blogs);
 			console.log("Found all books", blogs);
 		});
+
+		//GET blogs
+		app.get("/allblogs", async (req, res) => {
+			const cursor = blogsCollection.find({});
+			const page = req.query.page;
+			const size = parseInt(req.query.size);
+			let allblogs;
+			const count = await cursor.count();
+
+			if (page) {
+				allblogs = await cursor
+					.skip(page * size)
+					.limit(size)
+					.toArray();
+			} else {
+				allblogs = await cursor.toArray();
+			}
+
+			res.send({
+				count,
+				allblogs,
+			});
+		});
+
 		//To load blogs by id
 		app.get("/blogs/:id", async (req, res) => {
 			const id = req.params.id;
