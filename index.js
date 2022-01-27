@@ -200,6 +200,27 @@ async function run() {
 			console.log("Successfully updated rating", result);
 		});
 
+		//To update blogs rating
+		app.put("/blogconfirmation", async (req, res) => {
+			console.log(req.body);
+			const user = req.body;
+			const filter = { blogID: user?.blogID };
+			console.log("Request to update rating", user);
+			const options = { upsert: true };
+			const updateuser = {
+				$set: {
+					confirmation: user?.confirmation,
+				},
+			};
+			const result = await blogsCollection.updateOne(
+				filter,
+				updateuser,
+				options,
+			);
+			res.json(result);
+			console.log("Successfully updated rating", result);
+		});
+
 		/* ------
         ------Show all
         ------ */
