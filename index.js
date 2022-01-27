@@ -280,21 +280,21 @@ async function run() {
 			const cursor = blogsCollection.find({});
 			const page = req.query.page;
 			const size = parseInt(req.query.size);
-			let allblogs;
+			let products;
 			const count = await cursor.count();
 
 			if (page) {
-				allblogs = await cursor
+				products = await cursor
 					.skip(page * size)
 					.limit(size)
 					.toArray();
 			} else {
-				allblogs = await cursor.toArray();
+				products = await cursor.toArray();
 			}
 
 			res.send({
 				count,
-				allblogs,
+				products,
 			});
 		});
 
