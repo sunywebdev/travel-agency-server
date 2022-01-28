@@ -46,6 +46,7 @@ async function run() {
 		const blogsCollection = database.collection("blogs");
 		const usersCollection = database.collection("users");
 		const reviewsCollection = database.collection("reviews");
+		const sliderCollection = database.collection("sliders");
 
 		//To add new user when login or signup
 		app.post("/users", async (req, res) => {
@@ -177,6 +178,14 @@ async function run() {
 			console.log("Successfully Added New blogs ", result);
 			res.json(result);
 		});
+		//To post new sliders
+		app.post("/sliders", async (req, res) => {
+			const sliders = req.body;
+			console.log("Request from UI ", sliders);
+			const result = await sliderCollection.insertOne(sliders);
+			console.log("Successfully Added New sliders ", result);
+			res.json(result);
+		});
 
 		//To update blogs rating
 		app.put("/blogRating", async (req, res) => {
@@ -233,6 +242,15 @@ async function run() {
 			users = await get.toArray();
 			res.send(users);
 			console.log("Found all users", users);
+		});
+		//To Show all sliders
+		app.get("/sliders", async (req, res) => {
+			console.log(req.query);
+			const get = sliderCollection.find({});
+			console.log("Request to find sliders");
+			sliders = await get.toArray();
+			res.send(sliders);
+			console.log("Found all sliders", sliders);
 		});
 
 		//To Show all reviews
@@ -320,6 +338,15 @@ async function run() {
 			const result = await usersCollection.deleteOne(deleteId);
 			res.send(result);
 			console.log("user Successfully Deleted", result);
+		});
+		//To Delete sliders one by one
+		app.delete("/sliders/:id", async (req, res) => {
+			const id = req.params.id;
+			console.log("Request to delete ", id);
+			const deleteId = { _id: ObjectId(id) };
+			const result = await sliderCollection.deleteOne(deleteId);
+			res.send(result);
+			console.log("sliders Successfully Deleted", result);
 		});
 		//To Delete reviews one by one
 		app.delete("/reviews/:id", async (req, res) => {
