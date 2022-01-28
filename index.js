@@ -178,6 +178,36 @@ async function run() {
 			console.log("Successfully Added New blogs ", result);
 			res.json(result);
 		});
+
+		// To store/update single project data
+		app.put("/blogupdate/:id", async (req, res) => {
+			const id = req.params.id;
+			console.log("Request to update ", id);
+			const projectId = { _id: ObjectId(id) };
+			const updatedReq = req.body;
+			console.log("Comming form UI", updatedReq);
+			const options = { upsert: true };
+			const updateProject = {
+				$set: {
+					blogTitle: updatedReq.blogTitle,
+					publishedBy: updatedReq.publishedBy,
+					totalDays: updatedReq.totalDays,
+					totalCost: updatedReq.totalCost,
+					location: updatedReq.location,
+					details: updatedReq.details,
+					blogID: updatedReq.blogID,
+					catagory: updatedReq.catagory,
+				},
+			};
+			const result = await blogsCollection.updateOne(
+				projectId,
+				updateProject,
+				options,
+			);
+			res.json(result);
+			console.log("Updated Successfully", result);
+		});
+
 		//To post new sliders
 		app.post("/sliders", async (req, res) => {
 			const sliders = req.body;
