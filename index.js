@@ -272,6 +272,17 @@ async function run() {
 			res.send(result);
 			console.log("Found one", result);
 		});
+		//To load reviews data by email
+		app.get("/blogsbyemail", async (req, res) => {
+			const user = req.query;
+			console.log("user", user);
+			const result = await blogsCollection
+				.find({ userEmail: user?.email })
+				.toArray();
+			res.send(result);
+			console.log("Found one", result);
+		});
+
 		//To load reviews data by blogID
 		app.get("/reviewss", async (req, res) => {
 			const user = req.query;
